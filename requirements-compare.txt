@@ -1,0 +1,15 @@
+# Extra dependencies for the three-way server comparison.
+# Kept out of requirements.txt because the core batching experiment runs
+# without Ray, without Triton, and without a Docker daemon.
+-r requirements.txt
+
+# Arm 2. Ray Serve brings its own batching and replica autoscaling.
+ray[serve]>=2.30
+
+# Arm 4. Triton's official gRPC client, used only for the transport
+# comparison; the HTTP arms are driven by the Go generator instead.
+tritonclient[grpc]>=2.44
+
+# The local arm executes the same ONNX graph Triton and Ray load, so the
+# comparison isolates serving architecture rather than runtime.
+onnxruntime>=1.17

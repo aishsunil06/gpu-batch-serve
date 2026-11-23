@@ -80,9 +80,117 @@ Colab T4. Three things can only be answered there:
 Record the numbers here with the exact command and GPU name once the run
 completes, and update the README's GPU section at the same time.
 
-## 4. Threats to these results
+## 4. A larger batch can mean a worse server
 
-- **The CPU numbers are a single run each.** Arms were run in one
+Measured. Triton 24.08 CPU-only in Docker Desktop, the local arm native on
+the host, three repeats of 20 s per cell after a 5 s discarded warmup, all
+arms on byte-identical ONNX weights verified to agree to 1.3e-07.
+
+```bash
+python scripts/compare_servers.py --arms local,triton,triton-grpc     --concurrencies 1,8,32,64 --repeats 3 --duration 20 --warmup 5
+```
+
+| Arm | Conc. | RPS | p50 ms | p95 ms | Mean batch |
+|---|---:|---:|---:|---:|---:|
+| local | 1 | 62.9 (SE 0.8) | 15.6 | 19.0 | 1.0 |
+| triton | 1 | **75.2** (SE 0.7) | **13.2** | **14.7** | 1.0 |
+| triton-grpc | 1 | 75.1 (SE 0.3) | 13.2 | 14.6 | 1.0 |
+| local | 8 | 169.1 (SE 0.3) | 46.9 | 51.7 | **8.0** |
+| triton | 8 | **194.6** (SE 1.7) | **40.6** | **47.0** | 5.4 |
+| triton-grpc | 8 | 190.3 (SE 9.9) | 41.8 | 49.3 | 6.2 |
+| local | 32 | **238.0** (SE 1.8) | **133.9** | **142.7** | **31.7** |
+| triton | 32 | 207.7 (SE 2.2) | 152.9 | 181.8 | 16.4 |
+| triton-grpc | 32 | 215.0 (SE 4.4) | 146.3 | 168.8 | 15.9 |
+| local | 64 | **248.8** (SE 2.3) | **256.7** | **269.7** | 31.8 |
+| triton | 64 | 209.5 (SE 0.8) | 287.8 | 420.8 | 29.3 |
+| triton-grpc | 64 | 214.0 (SE 2.9) | 284.2 | 408.9 | 27.8 |
+
+### The result that matters
+
+**Triton wins below the crossover while forming batches a third smaller,
+and the naive collector wins above it while forming batches twice as
+large.** At concurrency 8 Triton is 15% faster on throughput and better on
+both percentiles, on a mean batch of 5.4 against the collector's 8.0.
+
+Part 1 of this repository treats mean batch size as the metric that
+explains a throughput result. This table shows that reading is wrong, and
+the mechanism is the interesting part.
+
+The collector holds one queue and runs one batch at a time. While a forward
+pass executes, nothing is dequeued, so arrivals pile up and the next batch
+is maximally full. Its batch of **31.7 at concurrency 32 is not a batcher
+working well; it is 32 clients stalled behind one forward pass.** Triton
+overlaps input handling with execution, so at any dispatch moment only part
+of the client population is queued and the rest are in flight. Its batch
+size converging to roughly half the concurrency is the signature of a
+server that is not blocking.
+
+So a larger achieved batch size is not evidence of a better batcher. It can
+be evidence of a worse one, and distinguishing the two needs the latency
+columns, not the batch column alone.
+
+### A prediction this made, and the experiment that refuted it
+
+Triton's batch of 16.4 at concurrency 32 sat suspiciously close to the
+middle value of `preferred_batch_size: [8, 16, 32]`, suggesting Triton was
+dispatching at a preferred size instead of filling the batch. If so,
+narrowing the setting to `[32]` should raise achieved batch size toward 32
+and recover the throughput gap.
+
+```bash
+# preferred_batch_size: [ 32 ]
+python scripts/compare_servers.py --arms triton --concurrencies 32,64 --repeats 3
+```
+
+| Config | Conc. | RPS | p50 ms | p95 ms | Mean batch |
+|---|---:|---:|---:|---:|---:|
+| preferred [8,16,32] | 32 | 207.7 (SE 2.2) | 152.9 | 181.8 | 16.4 |
+| preferred [32] | 32 | 224.0 (SE 5.0) | 134.0 | 227.0 | **14.9** |
+| preferred [8,16,32] | 64 | 209.5 (SE 0.8) | 287.8 | 420.8 | 29.3 |
+| preferred [32] | 64 | 211.4 (SE 1.5) | 291.5 | 412.3 | 30.0 |
+
+**The prediction was wrong.** Achieved batch size did not rise toward 32; it
+fell slightly, to 14.9. `preferred_batch_size` was therefore not the cap,
+which leaves the overlap explanation above as the one consistent with both
+experiments. Throughput at concurrency 32 did improve, by about 16 RPS
+against a combined standard error near 5.4, but p95 got 25% worse, so the
+setting is a latency-throughput trade rather than the free win the
+hypothesis predicted.
+
+Recording this is the point. A comparison that only reported the first
+table would have shipped the preferred-batch-size story as an explanation,
+and it is not one.
+
+### gRPC against HTTP
+
+Within noise at every concurrency: 215.0 against 207.7 RPS at concurrency
+32, 214.0 against 209.5 at 64. **No transport effect is detectable here,
+and this pairing cannot cleanly measure one anyway** (see the caveat
+below). On an 86 MB model returning 1.5 KB responses, there is little for a
+protocol to win.
+
+The incidental finding is more useful: the two rows agree to within about
+3% despite one being driven by Python threads and the other by Go
+goroutines, which is evidence that the server rather than the client
+dominates these measurements.
+
+## 5. Threats to these results
+
+- **The local arm runs natively; Triton runs in a virtual machine.** This is
+  the most serious threat on this page. Docker Desktop for Windows runs
+  containers inside a WSL2 VM, so every Triton request crosses a virtualised
+  network boundary that the local arm's requests do not. The local arm
+  therefore has a structural advantage that has nothing to do with batching,
+  and it is a plausible contributor to its high-concurrency throughput win.
+  **The cross-arm numbers at concurrency 32 and 64 should not be read as a
+  verdict on Triton.** Three things survive this confound: the within-Triton
+  preferred-batch-size experiment, since both configs ran in the same
+  container; the achieved-batch-size columns, which are counted server-side
+  and are unaffected by transport; and Triton's *win* at low concurrency,
+  which holds despite the handicap. Settling the rest needs both arms in
+  containers or both on the host.
+- **The CPU numbers in sections 1 and 2 are a single run each.** Arms were
+  run in one
   contiguous block in the order A then C, on a thermally managed laptop.
   Block ordering is a plausible confound for the tail columns
   specifically. The p50 and mean-batch-size columns, and the direction of
@@ -99,3 +207,19 @@ completes, and update the README's GPU section at the same time.
   enough that a single request already saturates the device will sit
   somewhere else, and plausibly does not exist at all.
 - **No accuracy check on fp16.** Arm E measures speed only.
+- **71% of every forward pass is padding.** Sequence length is fixed at 64
+  while the workload's real token counts run 11 to 30. Fixed shapes are what
+  let Triton batch without ragged-batching support and what put every arm on
+  equal footing, but they mean roughly three quarters of the compute in every
+  measurement above is spent on padding. Sequence-length bucketing would
+  change every absolute number here, though it applies equally to all arms
+  and so is unlikely to reverse a direction.
+- **One CPU instance everywhere.** `instance_group` count is held at 1, and
+  Ray's replica count at 1, so none of these results say anything about
+  scaling out model instances, which is the other half of a real serving
+  configuration.
+- **Ray Serve is not measured at all.** It could not be run on this host: the
+  Python installation is from the Microsoft Store, which executes inside an
+  AppContainer sandbox that denies the `AssignProcessToJobObject` privilege
+  Ray's process manager requires. The arm is implemented and the comparison
+  script supports it; it needs a non-Store Python, a Linux host, or WSL.

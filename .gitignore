@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 .venv/
 bench/logs/
+
+# The exported graph is 86 MB and is reproducible from scripts/export_onnx.py
+serving/triton/model_repository/*/1/*.onnx
+serving/triton/model_repository/*/1/*.onnx.data
+bench/fixtures/

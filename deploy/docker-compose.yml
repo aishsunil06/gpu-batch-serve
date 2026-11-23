@@ -1,0 +1,66 @@
+# Triton plus the observability stack that reads its metrics.
+#
+# Triton publishes Prometheus metrics on :8002 with no configuration, and
+# two of its counters answer the question this whole repository is about:
+# nv_inference_request_success counts requests, nv_inference_exec_count
+# counts forward passes, and their ratio is the batch size actually
+# achieved. That is the same number the hand-rolled batcher reports as
+# mean_batch_size, which makes the two arms directly comparable on the one
+# metric that distinguishes "batching did not help" from "batching did not
+# happen".
+
+services:
+  triton:
+    # The standard py3 image runs CPU-only when no --gpus flag is passed.
+    # NVIDIA does not publish a ready-made slim CPU-only tag, so this image
+    # is large; see README for the disk requirement.
+    image: nvcr.io/nvidia/tritonserver:24.08-py3
+    command: >
+      tritonserver
+      --model-repository=/models
+      --log-verbose=0
+      --allow-metrics=true
+      --metrics-port=8002
+    ports:
+      - "8000:8000"   # HTTP inference
+      - "8001:8001"   # gRPC inference
+      - "8002:8002"   # Prometheus metrics
+    volumes:
+      - ../serving/triton/model_repository:/models:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v2/health/ready"]
+      interval: 10s
+      timeout: 5s
+      # The ONNX model is 86 MB and loads from a bind mount, which is slow
+      # on Docker Desktop for Windows. A short start period reports the
+      # container unhealthy before it has had a chance to come up.
+      start_period: 180s
+      retries: 10
+    shm_size: 1gb
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=6h"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - triton
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_USERS_DEFAULT_THEME: light
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus

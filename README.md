@@ -87,6 +87,145 @@ number and the fp16 arm is unevaluated. The expectation is that the
 crossover moves *left* on a GPU, because a GPU's cost per batch is flatter
 in batch size than a CPU's, but an expectation is not a measurement.
 
+## Part two: is a hand-rolled batcher worth keeping?
+
+Having built a batcher and measured what it buys, the obvious next question
+is whether building it was a good idea. Two production systems implement the
+same policy, so the comparison is available.
+
+All four arms load **byte-identical ONNX weights**, with batch cap and queue
+delay set to the same values, driven by the same pre-tokenized fixture.
+Anything that differs between them belongs to the serving implementation
+rather than the model, the runtime, or the work.
+
+| Arm | Implementation | Transport |
+|---|---|---|
+| `local` | the ~60-line collector in this repository | HTTP |
+| `ray` | Ray Serve's `@serve.batch` | HTTP |
+| `triton` | NVIDIA Triton's `dynamic_batching` | HTTP |
+| `triton-grpc` | the same Triton | gRPC |
+
+The knobs correspond exactly, which is the point:
+
+```
+DynamicBatcher(max_batch_size=32, max_queue_delay_ms=5)
+@serve.batch(max_batch_size=32, batch_wait_timeout_s=0.005)
+dynamic_batching { max_queue_delay_microseconds: 5000 }   # max_batch_size: 32
+```
+
+### Three decisions that make it a fair comparison
+
+**Pooling is fused into the ONNX graph.** Were the model to stop at
+`last_hidden_state`, every arm would return a 64x384 tensor, roughly 98 KB
+serialised, against 1.5 KB for a pooled vector. The benchmark would then be
+measuring JSON encoding, and Triton would be penalised for nothing it did.
+
+**Tokenization happens offline, once, into a shared fixture.** It is CPU work
+that precedes any batching decision and is identical in every arm, so leaving
+it in the request path would add a constant per-request cost that shrinks the
+measured difference between arms for an irrelevant reason. It also lets a Go
+client participate without a tokenizer.
+
+**Sequence length is fixed at 64.** A fixed input shape is what lets Triton's
+dynamic batcher coalesce arbitrary requests without ragged-batching support,
+and it puts every arm on identical footing. The cost is real: **71% of every
+forward pass is padding** on this workload, which is exactly what
+sequence-length bucketing exists to fix and which this project does not do.
+
+### The achieved-batch-size problem
+
+Every arm must report the batch size it actually formed, or "batching did not
+help" and "batching did not happen" are indistinguishable. Each exposes it
+differently:
+
+- `local` and `ray` count batches and requests directly.
+- `triton` does not report it at all. It is derived from two Prometheus
+  counters, `nv_inference_request_success / nv_inference_exec_count`, and
+  because those counters are monotonic, a per-window figure requires
+  differencing a before and after snapshot. Dividing the raw totals would
+  report the batch size since the container started.
+
+That derivation is the most error-prone part of the harness, so it is
+covered by tests against real Triton metrics output.
+
+### Running the comparison
+
+Each arm has a different lifecycle, so the comparison script does not start
+them. Start what you want to measure, then run it; unreachable arms are
+skipped with a note rather than failing the run.
+
+```bash
+pip install -r requirements-compare.txt
+
+python scripts/export_onnx.py          # 86 MB graph, verified against torch
+python scripts/prepare_fixture.py      # shared pre-tokenized workload
+
+# Arm 1, the control
+GBS_MAX_BATCH_SIZE=32 GBS_MAX_QUEUE_DELAY_MS=5 \
+  python -m uvicorn serving.local.app:get_app --factory --port 8100
+
+# Arm 2
+python serving/ray/app.py --max-batch-size 32 --batch-wait-ms 5 --block
+
+# Arms 3 and 4, plus Prometheus and Grafana
+docker compose -f deploy/docker-compose.yml up -d
+
+python scripts/compare_servers.py --quick --arms local,triton
+python scripts/compare_servers.py --repeats 3
+```
+
+Grafana is on `http://localhost:3000` (anonymous viewer, no login) with a
+provisioned dashboard whose first panel is achieved batch size. Prometheus is
+on `:9090`, Triton's raw metrics on `:8002/metrics`.
+
+**Disk:** the Triton image is 9.16 GB compressed and roughly 17 GB extracted.
+NVIDIA does not publish a slim CPU-only tag; current docs say CPU-only
+containers require a custom build. The standard `py3` image runs CPU-only
+when no `--gpus` flag is passed, which is how `deploy/docker-compose.yml`
+uses it.
+
+### Results
+
+**A larger achieved batch size turned out to be evidence of a worse server,
+not a better one.** Full numbers in [docs/FINDINGS.md](docs/FINDINGS.md)
+section 4.
+
+| Arm | Conc. 8 RPS | Conc. 8 batch | Conc. 32 RPS | Conc. 32 batch |
+|---|---:|---:|---:|---:|
+| local | 169.1 | **8.0** | **238.0** | **31.7** |
+| triton | **194.6** | 5.4 | 207.7 | 16.4 |
+| triton-grpc | 190.3 | 6.2 | 215.0 | 15.9 |
+
+Triton is 15% faster at concurrency 8 while forming batches a third
+smaller. The collector only forms bigger batches because it blocks: nothing
+is dequeued while a forward pass runs, so arrivals pile up and the next
+batch is maximally full. Its batch of 31.7 at concurrency 32 is 32 clients
+stalled behind one forward pass, not a batcher working well. Triton overlaps
+input handling with execution, so its batch size converges to about half the
+concurrency, which is the signature of a server that is not blocking.
+
+Part 1 of this README treats mean batch size as the number that explains a
+throughput result. Part 2 shows that is wrong, which is the most useful
+thing the comparison produced.
+
+It also produced a **refuted prediction**, recorded in full because the
+first table alone would have shipped a wrong explanation: Triton's 16.4
+looked like it was tracking `preferred_batch_size: [8,16,32]`, so narrowing
+it to `[32]` should have raised the batch toward 32. It fell to 14.9
+instead, ruling preference out and leaving overlap as the only explanation
+consistent with both experiments.
+
+**Read the cross-arm high-concurrency rows with care.** The local arm runs
+natively on the host while Triton runs inside Docker Desktop's WSL2 VM, so
+Triton pays a virtualised network hop the local arm does not. That handicap
+plausibly contributes to the collector's win at concurrency 32 and 64. The
+within-Triton experiment, the server-side batch counts, and Triton's
+low-concurrency win all survive it; the rest does not.
+
+`ray` is unmeasured: Microsoft Store Python runs in an AppContainer sandbox
+that denies a privilege Ray's process manager needs. The arm is implemented
+and needs a non-Store Python, Linux, or WSL.
+
 ## Reproducing
 
 ```bash
@@ -148,7 +287,8 @@ whether two arms differ, and the error on the mean is what answers it.
 ```
 src/gpu_batch_serve/
     config.py        environment-driven configuration, one knob per arm
-    engine.py        batch of strings in, batch of vectors out
+    engine.py        torch engine: batch of strings in, vectors out
+    onnx_engine.py   ONNX engine over pre-tokenized input, shared by all arms
     batcher.py       the queue and the collector loop: the experiment
     api.py           FastAPI surface, one text per request
     gpu.py           nvidia-smi utilisation sampling
@@ -156,7 +296,17 @@ src/gpu_batch_serve/
         workload.py  deterministic mixed-length queries
         load.py      closed-loop generator, percentiles
         report.py    aggregation and markdown rendering
-scripts/run_bench.py the sweep: one server process per arm
+serving/
+    local/app.py     arm 1, the hand-rolled batcher over the ONNX graph
+    ray/app.py       arm 2, Ray Serve's @serve.batch
+    triton/          arm 3 and 4, model repository and config.pbtxt
+deploy/              Triton, Prometheus, Grafana, and the dashboard
+loadgen/main.go      Go closed-loop generator, HTTP, all arms
+scripts/
+    export_onnx.py   pooled encoder to ONNX, verified against torch
+    prepare_fixture.py  offline tokenization into a shared fixture
+    run_bench.py     the batching sweep: one server process per arm
+    compare_servers.py  the four-arm comparison
 notebooks/           Colab runner
-tests/               30 tests, no GPU or model download required
+tests/               52 tests, no GPU, Docker or model download required
 ```

@@ -61,7 +61,14 @@ class BatchStats:
 
 @dataclass
 class _Waiter:
-    text: str
+    """One queued request: its payload and the future awaiting its result.
+
+    The payload is typed loosely because the collector is deliberately
+    agnostic to it. It is a string for the text service and a tokenized
+    record for the server comparison.
+    """
+
+    text: object
     future: asyncio.Future
 
 
@@ -74,6 +81,11 @@ class DynamicBatcher:
             disables coalescing entirely.
         max_queue_delay_ms: Grace period the collector grants a partially
             filled batch before running it anyway.
+        batch_fn: Optional callable taking the list of queued items and
+            returning one result per item, used instead of ``engine.embed``.
+            This is what lets the same collector queue pre-tokenized arrays
+            for the server comparison and plain strings for the original
+            service, without the queueing logic knowing which it holds.
     """
 
     def __init__(
@@ -81,6 +93,7 @@ class DynamicBatcher:
         engine: Engine,
         max_batch_size: int = 1,
         max_queue_delay_ms: float = 0.0,
+        batch_fn=None,
     ) -> None:
         if max_batch_size < 1:
             raise ValueError("max_batch_size must be >= 1")
@@ -88,6 +101,7 @@ class DynamicBatcher:
             raise ValueError("max_queue_delay_ms must be >= 0")
 
         self._engine = engine
+        self._batch_fn = batch_fn
         self._max_batch_size = max_batch_size
         self._max_queue_delay = max_queue_delay_ms / 1000.0
         self._queue: asyncio.Queue[_Waiter] = asyncio.Queue()
@@ -114,8 +128,8 @@ class DynamicBatcher:
     def reset_stats(self) -> None:
         self._stats = BatchStats()
 
-    async def submit(self, text: str) -> List[float]:
-        """Enqueue one text and wait for its vector."""
+    async def submit(self, text: object) -> List[float]:
+        """Enqueue one item and wait for its result."""
         loop = asyncio.get_running_loop()
         waiter = _Waiter(text=text, future=loop.create_future())
         await self._queue.put(waiter)
@@ -164,12 +178,13 @@ class DynamicBatcher:
     async def _run_batch(self, batch: Sequence[_Waiter]) -> None:
         texts = [w.text for w in batch]
         loop = asyncio.get_running_loop()
+        runner = self._batch_fn if self._batch_fn is not None else self._engine.embed
         started = time.perf_counter()
         try:
-            # Torch releases the GIL inside the forward pass, so running it
-            # in the default executor keeps the event loop free to accept
-            # the arrivals that form the next batch.
-            vectors = await loop.run_in_executor(None, self._engine.embed, texts)
+            # Torch and ONNX Runtime both release the GIL inside the forward
+            # pass, so running it in the default executor keeps the event
+            # loop free to accept the arrivals that form the next batch.
+            vectors = await loop.run_in_executor(None, runner, texts)
         except Exception as exc:  # noqa: BLE001 - propagated to every caller
             for waiter in batch:
                 if not waiter.future.done():

@@ -1,0 +1,64 @@
+# Triton configuration for the pooled MiniLM encoder.
+#
+# This file is the arm being tested. Every value below has a counterpart in
+# the hand-rolled batcher in src/gpu_batch_serve/batcher.py, and the point
+# of the comparison is to set them identically and see what a production
+# implementation of the same policy buys.
+
+name: "minilm_pooled"
+platform: "onnxruntime_onnx"
+
+# With max_batch_size > 0 Triton treats the first dimension of every
+# input and output as the batch axis, which is why the dims below exclude
+# it. This must match the dynamic batch axis in the exported graph.
+max_batch_size: 32
+
+input [
+  {
+    name: "input_ids"
+    data_type: TYPE_INT64
+    dims: [ 64 ]
+  },
+  {
+    name: "attention_mask"
+    data_type: TYPE_INT64
+    dims: [ 64 ]
+  },
+  {
+    name: "token_type_ids"
+    data_type: TYPE_INT64
+    dims: [ 64 ]
+  }
+]
+
+output [
+  {
+    name: "embedding"
+    data_type: TYPE_FP32
+    dims: [ 384 ]
+  }
+]
+
+# 5000 microseconds is 5 ms, the same grace period arm C of the local
+# benchmark uses, so the two are directly comparable. Triton calls this a
+# queue delay for the same reason: it is time the first request in a batch
+# is made to wait for company.
+dynamic_batching {
+  max_queue_delay_microseconds: 5000
+  preferred_batch_size: [ 8, 16, 32 ]
+}
+
+# One CPU instance is the control. Raising count is the other half of a
+# serving configuration and is swept separately by compare_servers.py.
+instance_group [
+  {
+    count: 1
+    kind: KIND_CPU
+  }
+]
+
+# Sequence length is fixed, so there is exactly one input shape and the
+# cache would be useless churn on a workload of distinct queries.
+response_cache {
+  enable: false
+}

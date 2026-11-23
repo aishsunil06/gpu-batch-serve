@@ -1,0 +1,1126 @@
+{
+  "meta": {
+    "arms": [
+      "local",
+      "triton",
+      "triton-grpc"
+    ],
+    "skipped": [],
+    "concurrencies": [
+      1,
+      8,
+      32,
+      64
+    ],
+    "repeats": 3,
+    "duration_seconds": 20.0,
+    "warmup_seconds": 5.0,
+    "fixture": "C:\\Users\\HP\\Desktop\\gpu-batch-serve\\bench\\fixtures\\workload_tokens.json"
+  },
+  "cells": [
+    {
+      "arm": "local",
+      "concurrency": 1,
+      "runs": [
+        {
+          "arm": "local",
+          "completed": 1224,
+          "concurrency": 1,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 15.59,
+            "p95": 23.045,
+            "p99": 29.868
+          },
+          "throughput_rps": 61.19351624098668,
+          "wall_seconds": 20.0021191,
+          "batching": {
+            "batches": 1484,
+            "requests": 1484,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 9.6627
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 1277,
+          "concurrency": 1,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 15.536,
+            "p95": 16.984,
+            "p99": 18.639
+          },
+          "throughput_rps": 63.82075031192454,
+          "wall_seconds": 20.0091662,
+          "batching": {
+            "batches": 1585,
+            "requests": 1585,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.9363
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 1272,
+          "concurrency": 1,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 15.578,
+            "p95": 17.053,
+            "p99": 21.166
+          },
+          "throughput_rps": 63.5842028227297,
+          "wall_seconds": 20.0049689,
+          "batching": {
+            "batches": 1577,
+            "requests": 1577,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 9.085
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 62.866,
+          "stderr": 0.839,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 15.568,
+          "stderr": 0.016,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 19.027,
+          "stderr": 2.009,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 23.224,
+          "stderr": 3.401,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "local",
+      "concurrency": 8,
+      "runs": [
+        {
+          "arm": "local",
+          "completed": 3377,
+          "concurrency": 8,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 46.951,
+            "p95": 52.151,
+            "p99": 60.338
+          },
+          "throughput_rps": 168.72840924644473,
+          "wall_seconds": 20.0144126,
+          "batching": {
+            "batches": 527,
+            "requests": 4209,
+            "mean_batch_size": 7.987,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 17.3831
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 3384,
+          "concurrency": 8,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 46.964,
+            "p95": 51.318,
+            "p99": 58.929
+          },
+          "throughput_rps": 168.93233010160063,
+          "wall_seconds": 20.0316896,
+          "batching": {
+            "batches": 528,
+            "requests": 4224,
+            "mean_batch_size": 8.0,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 17.7521
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 3392,
+          "concurrency": 8,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 46.786,
+            "p95": 51.749,
+            "p99": 56.017
+          },
+          "throughput_rps": 169.57178495070204,
+          "wall_seconds": 20.0033278,
+          "batching": {
+            "batches": 525,
+            "requests": 4200,
+            "mean_batch_size": 8.0,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 17.2305
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 169.078,
+          "stderr": 0.254,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 46.9,
+          "stderr": 0.057,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 51.739,
+          "stderr": 0.241,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 58.428,
+          "stderr": 1.272,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 7.996,
+          "stderr": 0.004,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "local",
+      "concurrency": 32,
+      "runs": [
+        {
+          "arm": "local",
+          "completed": 4832,
+          "concurrency": 32,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 132.961,
+            "p95": 139.705,
+            "p99": 143.436
+          },
+          "throughput_rps": 240.83975679431157,
+          "wall_seconds": 20.0631327,
+          "batching": {
+            "batches": 192,
+            "requests": 6061,
+            "mean_batch_size": 31.568,
+            "max_observed_batch_size": 32,
+            "inference_seconds": 23.1783
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 4800,
+          "concurrency": 32,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 133.193,
+            "p95": 143.399,
+            "p99": 166.717
+          },
+          "throughput_rps": 238.6616570258959,
+          "wall_seconds": 20.112154,
+          "batching": {
+            "batches": 188,
+            "requests": 5997,
+            "mean_batch_size": 31.899,
+            "max_observed_batch_size": 32,
+            "inference_seconds": 23.3336
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 4718,
+          "concurrency": 32,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 135.514,
+            "p95": 144.883,
+            "p99": 198.957
+          },
+          "throughput_rps": 234.57838887574985,
+          "wall_seconds": 20.1126797,
+          "batching": {
+            "batches": 186,
+            "requests": 5910,
+            "mean_batch_size": 31.774,
+            "max_observed_batch_size": 32,
+            "inference_seconds": 23.2695
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 238.027,
+          "stderr": 1.835,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 133.889,
+          "stderr": 0.815,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 142.662,
+          "stderr": 1.539,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 169.703,
+          "stderr": 16.097,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 31.747,
+          "stderr": 0.097,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "local",
+      "concurrency": 64,
+      "runs": [
+        {
+          "arm": "local",
+          "completed": 4956,
+          "concurrency": 64,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 260.788,
+            "p95": 276.222,
+            "p99": 309.557
+          },
+          "throughput_rps": 244.88324585963133,
+          "wall_seconds": 20.2382159,
+          "batching": {
+            "batches": 196,
+            "requests": 6253,
+            "mean_batch_size": 31.903,
+            "max_observed_batch_size": 32,
+            "inference_seconds": 25.3042
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 5024,
+          "concurrency": 64,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 256.843,
+            "p95": 268.663,
+            "p99": 273.672
+          },
+          "throughput_rps": 248.89242129413776,
+          "wall_seconds": 20.1854278,
+          "batching": {
+            "batches": 197,
+            "requests": 6278,
+            "mean_batch_size": 31.868,
+            "max_observed_batch_size": 32,
+            "inference_seconds": 25.3172
+          }
+        },
+        {
+          "arm": "local",
+          "completed": 5109,
+          "concurrency": 64,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 252.395,
+            "p95": 264.226,
+            "p99": 270.004
+          },
+          "throughput_rps": 252.76395955014743,
+          "wall_seconds": 20.2125335,
+          "batching": {
+            "batches": 201,
+            "requests": 6384,
+            "mean_batch_size": 31.761,
+            "max_observed_batch_size": 32,
+            "inference_seconds": 25.355
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 248.847,
+          "stderr": 2.275,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 256.675,
+          "stderr": 2.424,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 269.704,
+          "stderr": 3.502,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 284.411,
+          "stderr": 12.618,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 31.844,
+          "stderr": 0.043,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton",
+      "concurrency": 1,
+      "runs": [
+        {
+          "arm": "triton",
+          "completed": 1481,
+          "concurrency": 1,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 13.407,
+            "p95": 14.792,
+            "p99": 16.439
+          },
+          "throughput_rps": 74.01453334583867,
+          "wall_seconds": 20.0095837,
+          "batching": {
+            "requests": 1854.0,
+            "batches": 1854.0,
+            "mean_batch_size": 1.0
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 1530,
+          "concurrency": 1,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 13.045,
+            "p95": 14.575,
+            "p99": 15.417
+          },
+          "throughput_rps": 76.4977873015023,
+          "wall_seconds": 20.0005785,
+          "batching": {
+            "requests": 1918.0,
+            "batches": 1918.0,
+            "mean_batch_size": 1.0
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 1504,
+          "concurrency": 1,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 13.209,
+            "p95": 14.71,
+            "p99": 16.354
+          },
+          "throughput_rps": 75.18188717974066,
+          "wall_seconds": 20.0048184,
+          "batching": {
+            "requests": 1885.0,
+            "batches": 1885.0,
+            "mean_batch_size": 1.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 75.231,
+          "stderr": 0.717,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 13.22,
+          "stderr": 0.105,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 14.692,
+          "stderr": 0.063,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 16.07,
+          "stderr": 0.327,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton",
+      "concurrency": 8,
+      "runs": [
+        {
+          "arm": "triton",
+          "completed": 3835,
+          "concurrency": 8,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 41.311,
+            "p95": 47.798,
+            "p99": 52.772
+          },
+          "throughput_rps": 191.36474258657728,
+          "wall_seconds": 20.0402642,
+          "batching": {
+            "requests": 4775.0,
+            "batches": 1087.0,
+            "mean_batch_size": 4.393
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 3946,
+          "concurrency": 8,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 40.241,
+            "p95": 46.249,
+            "p99": 49.263
+          },
+          "throughput_rps": 196.8632618066309,
+          "wall_seconds": 20.0443697,
+          "batching": {
+            "requests": 4954.0,
+            "batches": 695.0,
+            "mean_batch_size": 7.128
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 3919,
+          "concurrency": 8,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 40.312,
+            "p95": 46.907,
+            "p99": 49.388
+          },
+          "throughput_rps": 195.58727362170487,
+          "wall_seconds": 20.037091,
+          "batching": {
+            "requests": 4927.0,
+            "batches": 1035.0,
+            "mean_batch_size": 4.76
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 194.605,
+          "stderr": 1.662,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 40.621,
+          "stderr": 0.345,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 46.985,
+          "stderr": 0.449,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 50.474,
+          "stderr": 1.149,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 5.427,
+          "stderr": 0.857,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton",
+      "concurrency": 32,
+      "runs": [
+        {
+          "arm": "triton",
+          "completed": 4117,
+          "concurrency": 32,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 155.252,
+            "p95": 201.409,
+            "p99": 233.919
+          },
+          "throughput_rps": 204.30756775875125,
+          "wall_seconds": 20.1509912,
+          "batching": {
+            "requests": 5183.0,
+            "batches": 312.0,
+            "mean_batch_size": 16.612
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 4164,
+          "concurrency": 32,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 153.317,
+            "p95": 176.93,
+            "p99": 230.139
+          },
+          "throughput_rps": 206.91097668644483,
+          "wall_seconds": 20.1245969,
+          "batching": {
+            "requests": 5232.0,
+            "batches": 321.0,
+            "mean_batch_size": 16.299
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 4264,
+          "concurrency": 32,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 150.245,
+            "p95": 167.098,
+            "p99": 196.013
+          },
+          "throughput_rps": 211.97011336732353,
+          "wall_seconds": 20.1160434,
+          "batching": {
+            "requests": 5333.0,
+            "batches": 329.0,
+            "mean_batch_size": 16.21
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 207.73,
+          "stderr": 2.25,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 152.938,
+          "stderr": 1.458,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 181.812,
+          "stderr": 10.201,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 220.024,
+          "stderr": 12.055,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 16.374,
+          "stderr": 0.122,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton",
+      "concurrency": 64,
+      "runs": [
+        {
+          "arm": "triton",
+          "completed": 4213,
+          "concurrency": 64,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 292.436,
+            "p95": 425.232,
+            "p99": 453.026
+          },
+          "throughput_rps": 208.04091416663962,
+          "wall_seconds": 20.2508243,
+          "batching": {
+            "requests": 5287.0,
+            "batches": 177.0,
+            "mean_batch_size": 29.87
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 4256,
+          "concurrency": 64,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 286.123,
+            "p95": 416.283,
+            "p99": 460.26
+          },
+          "throughput_rps": 210.0688860102256,
+          "wall_seconds": 20.2600208,
+          "batching": {
+            "requests": 5379.0,
+            "batches": 184.0,
+            "mean_batch_size": 29.234
+          }
+        },
+        {
+          "arm": "triton",
+          "completed": 4263,
+          "concurrency": 64,
+          "failed": 0,
+          "generator": "go",
+          "latency_ms": {
+            "p50": 284.711,
+            "p95": 420.83,
+            "p99": 455.95
+          },
+          "throughput_rps": 210.52414289191626,
+          "wall_seconds": 20.249459,
+          "batching": {
+            "requests": 5365.0,
+            "batches": 187.0,
+            "mean_batch_size": 28.69
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 209.545,
+          "stderr": 0.763,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 287.757,
+          "stderr": 2.375,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 420.782,
+          "stderr": 2.583,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 456.412,
+          "stderr": 2.101,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 29.265,
+          "stderr": 0.341,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton-grpc",
+      "concurrency": 1,
+      "runs": [
+        {
+          "arm": "triton-grpc",
+          "concurrency": 1,
+          "completed": 1493,
+          "failed": 0,
+          "wall_seconds": 20.011201899993466,
+          "throughput_rps": 74.60821231334873,
+          "latency_ms": {
+            "p50": 13.306799985002726,
+            "p95": 14.563699980499223,
+            "p99": 15.740300004836172
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 1859.0,
+            "batches": 1859.0,
+            "mean_batch_size": 1.0
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 1,
+          "completed": 1501,
+          "failed": 0,
+          "wall_seconds": 20.001570100022946,
+          "throughput_rps": 75.04410866216338,
+          "latency_ms": {
+            "p50": 13.177000015275553,
+            "p95": 14.739699981873855,
+            "p99": 17.684699996607378
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 1862.0,
+            "batches": 1862.0,
+            "mean_batch_size": 1.0
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 1,
+          "completed": 1516,
+          "failed": 0,
+          "wall_seconds": 20.00398700000369,
+          "throughput_rps": 75.78489228170966,
+          "latency_ms": {
+            "p50": 13.179200002923608,
+            "p95": 14.39530000789091,
+            "p99": 15.736300003482029
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 1885.0,
+            "batches": 1885.0,
+            "mean_batch_size": 1.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 75.146,
+          "stderr": 0.343,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 13.221,
+          "stderr": 0.043,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 14.566,
+          "stderr": 0.099,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 16.387,
+          "stderr": 0.649,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton-grpc",
+      "concurrency": 8,
+      "runs": [
+        {
+          "arm": "triton-grpc",
+          "concurrency": 8,
+          "completed": 4049,
+          "failed": 0,
+          "wall_seconds": 20.030583499989007,
+          "throughput_rps": 202.14089120280605,
+          "latency_ms": {
+            "p50": 38.28469998552464,
+            "p95": 47.39760002121329,
+            "p99": 52.342899987706915
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5170.0,
+            "batches": 789.0,
+            "mean_batch_size": 6.553
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 8,
+          "completed": 3963,
+          "failed": 0,
+          "wall_seconds": 20.015866100002313,
+          "throughput_rps": 197.99293121767747,
+          "latency_ms": {
+            "p50": 39.085500000510365,
+            "p95": 48.641700006555766,
+            "p99": 54.217199998674914
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5056.0,
+            "batches": 937.0,
+            "mean_batch_size": 5.396
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 8,
+          "completed": 3416,
+          "failed": 0,
+          "wall_seconds": 20.012738899997203,
+          "throughput_rps": 170.69127904329363,
+          "latency_ms": {
+            "p50": 48.14790000091307,
+            "p95": 51.76689999643713,
+            "p99": 55.50119999679737
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 4408.0,
+            "batches": 675.0,
+            "mean_batch_size": 6.53
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 190.275,
+          "stderr": 9.865,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 41.839,
+          "stderr": 3.163,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 49.269,
+          "stderr": 1.3,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 54.02,
+          "stderr": 0.917,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 6.16,
+          "stderr": 0.382,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton-grpc",
+      "concurrency": 32,
+      "runs": [
+        {
+          "arm": "triton-grpc",
+          "concurrency": 32,
+          "completed": 4296,
+          "failed": 0,
+          "wall_seconds": 20.160789199988358,
+          "throughput_rps": 213.08689641983264,
+          "latency_ms": {
+            "p50": 147.4029000091832,
+            "p95": 171.2777000211645,
+            "p99": 180.70259998785332
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5385.0,
+            "batches": 338.0,
+            "mean_batch_size": 15.932
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 32,
+          "completed": 4497,
+          "failed": 0,
+          "wall_seconds": 20.126139700005297,
+          "throughput_rps": 223.4407624627,
+          "latency_ms": {
+            "p50": 140.95619998988695,
+            "p95": 159.0149000112433,
+            "p99": 168.79510000580922
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5675.0,
+            "batches": 358.0,
+            "mean_batch_size": 15.852
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 32,
+          "completed": 4199,
+          "failed": 0,
+          "wall_seconds": 20.140316700009862,
+          "throughput_rps": 208.48728759056425,
+          "latency_ms": {
+            "p50": 150.60009999433532,
+            "p95": 176.19480000576004,
+            "p99": 189.53030000557192
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5358.0,
+            "batches": 336.0,
+            "mean_batch_size": 15.946
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 215.005,
+          "stderr": 4.422,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 146.32,
+          "stderr": 2.836,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 168.829,
+          "stderr": 5.108,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 179.676,
+          "stderr": 6.008,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 15.91,
+          "stderr": 0.029,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "triton-grpc",
+      "concurrency": 64,
+      "runs": [
+        {
+          "arm": "triton-grpc",
+          "concurrency": 64,
+          "completed": 4395,
+          "failed": 0,
+          "wall_seconds": 20.314343600010034,
+          "throughput_rps": 216.3495944805142,
+          "latency_ms": {
+            "p50": 280.1853000128176,
+            "p95": 404.07129999948665,
+            "p99": 425.4079999809619
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5589.0,
+            "batches": 201.0,
+            "mean_batch_size": 27.806
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 64,
+          "completed": 4403,
+          "failed": 0,
+          "wall_seconds": 20.251429799973266,
+          "throughput_rps": 217.4167475328489,
+          "latency_ms": {
+            "p50": 279.6544000157155,
+            "p95": 400.6637000129558,
+            "p99": 432.85480001941323
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5552.0,
+            "batches": 200.0,
+            "mean_batch_size": 27.76
+          }
+        },
+        {
+          "arm": "triton-grpc",
+          "concurrency": 64,
+          "completed": 4222,
+          "failed": 0,
+          "wall_seconds": 20.264778800017666,
+          "throughput_rps": 208.34177573141432,
+          "latency_ms": {
+            "p50": 292.654599994421,
+            "p95": 421.9978000037372,
+            "p99": 445.71100000757724
+          },
+          "generator": "python-grpc",
+          "batching": {
+            "requests": 5336.0,
+            "batches": 192.0,
+            "mean_batch_size": 27.792
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 214.036,
+          "stderr": 2.864,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 284.165,
+          "stderr": 4.248,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 408.911,
+          "stderr": 6.617,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 434.658,
+          "stderr": 5.93,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 27.786,
+          "stderr": 0.014,
+          "n": 3
+        }
+      }
+    }
+  ]
+}
