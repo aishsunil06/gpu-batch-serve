@@ -15,7 +15,7 @@
     "repeats": 3,
     "duration_seconds": 20.0,
     "warmup_seconds": 5.0,
-    "fixture": "C:\\Users\\HP\\Desktop\\gpu-batch-serve\\bench\\fixtures\\workload_tokens.json"
+    "fixture": "bench/fixtures/workload_tokens.json"
   },
   "cells": [
     {
