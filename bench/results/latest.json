@@ -1,0 +1,292 @@
+{
+  "meta": {
+    "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+    "device": "cpu",
+    "workload_size": 64,
+    "seed": 17,
+    "duration_seconds": 6.0,
+    "warmup_seconds": 2.0,
+    "repeats": 1,
+    "concurrencies": [
+      1,
+      8
+    ],
+    "started_at": 1795455417.2313268,
+    "elapsed_seconds": 117.8,
+    "gpu_name": null
+  },
+  "cells": [
+    {
+      "arm": "A: no batching",
+      "note": "one request, one forward pass",
+      "max_batch_size": 1,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 1,
+      "runs": [
+        {
+          "concurrency": 1,
+          "completed": 645,
+          "failed": 0,
+          "wall_seconds": 6.008,
+          "throughput_rps": 107.36,
+          "latency_ms": {
+            "p50": 8.59,
+            "p95": 14.71,
+            "p99": 18.4,
+            "mean": 9.31
+          },
+          "batching": {
+            "batches": 645,
+            "requests": 645,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 4.8289
+          },
+          "gpu": {
+            "samples": 0,
+            "mean_utilization_pct": null,
+            "peak_utilization_pct": null,
+            "peak_memory_mib": null
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 107.36,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p50_ms": {
+          "mean": 8.59,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p95_ms": {
+          "mean": 14.71,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p99_ms": {
+          "mean": 18.4,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": null,
+          "stderr": null,
+          "n": 0
+        }
+      }
+    },
+    {
+      "arm": "A: no batching",
+      "note": "one request, one forward pass",
+      "max_batch_size": 1,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 8,
+      "runs": [
+        {
+          "concurrency": 8,
+          "completed": 728,
+          "failed": 0,
+          "wall_seconds": 6.051,
+          "throughput_rps": 120.31,
+          "latency_ms": {
+            "p50": 62.91,
+            "p95": 84.87,
+            "p99": 92.6,
+            "mean": 66.22
+          },
+          "batching": {
+            "batches": 728,
+            "requests": 728,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 6.0387
+          },
+          "gpu": {
+            "samples": 0,
+            "mean_utilization_pct": null,
+            "peak_utilization_pct": null,
+            "peak_memory_mib": null
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 120.31,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p50_ms": {
+          "mean": 62.91,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p95_ms": {
+          "mean": 84.87,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p99_ms": {
+          "mean": 92.6,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": null,
+          "stderr": null,
+          "n": 0
+        }
+      }
+    },
+    {
+      "arm": "C: batch 8, 5ms wait",
+      "note": "grant a partial batch a grace period",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 1,
+      "runs": [
+        {
+          "concurrency": 1,
+          "completed": 361,
+          "failed": 0,
+          "wall_seconds": 6.011,
+          "throughput_rps": 60.06,
+          "latency_ms": {
+            "p50": 15.92,
+            "p95": 27.51,
+            "p99": 29.68,
+            "mean": 16.65
+          },
+          "batching": {
+            "batches": 361,
+            "requests": 361,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 2.3325
+          },
+          "gpu": {
+            "samples": 0,
+            "mean_utilization_pct": null,
+            "peak_utilization_pct": null,
+            "peak_memory_mib": null
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 60.06,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p50_ms": {
+          "mean": 15.92,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p95_ms": {
+          "mean": 27.51,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p99_ms": {
+          "mean": 29.68,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": null,
+          "stderr": null,
+          "n": 0
+        }
+      }
+    },
+    {
+      "arm": "C: batch 8, 5ms wait",
+      "note": "grant a partial batch a grace period",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 8,
+      "runs": [
+        {
+          "concurrency": 8,
+          "completed": 1448,
+          "failed": 0,
+          "wall_seconds": 6.009,
+          "throughput_rps": 240.96,
+          "latency_ms": {
+            "p50": 33.16,
+            "p95": 37.32,
+            "p99": 39.35,
+            "mean": 33.19
+          },
+          "batching": {
+            "batches": 181,
+            "requests": 1448,
+            "mean_batch_size": 8.0,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 4.226
+          },
+          "gpu": {
+            "samples": 0,
+            "mean_utilization_pct": null,
+            "peak_utilization_pct": null,
+            "peak_memory_mib": null
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 240.96,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p50_ms": {
+          "mean": 33.16,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p95_ms": {
+          "mean": 37.32,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "p99_ms": {
+          "mean": 39.35,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "mean_batch_size": {
+          "mean": 8.0,
+          "stderr": 0.0,
+          "n": 1
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": null,
+          "stderr": null,
+          "n": 0
+        }
+      }
+    }
+  ]
+}
