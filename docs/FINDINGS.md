@@ -61,24 +61,120 @@ Note also that arm A barely gained throughput from 8x the concurrency
 saturated serial resource, and it is the condition under which batching
 has something to work with.
 
-## 3. GPU run
+## 3. On a GPU the gain is 2.3x, and the GPU is not what limits it
 
-**Not yet measured.** `notebooks/colab_run.ipynb` runs the full grid on a
-Colab T4. Three things can only be answered there:
+Measured on a Colab **Tesla T4**. Full grid: 5 arms x 4 concurrencies x 3
+repeats of 20 s, after a 5 s discarded warmup, on a 512-query workload.
+26 minutes, 222,333 requests, **0 failed**.
 
-- **Where the crossover sits on a GPU.** A GPU's cost per batch is flatter
-  in batch size than a CPU's, so the crossover should move left, possibly
-  to a concurrency low enough that batching is worth enabling by default.
-  This is a prediction, not a result.
-- **Whether utilisation explains the gain.** If arm A already saturates the
-  GPU, batching cannot help, and the utilisation column will say so
-  directly. If arm A sits at low utilisation, the headroom is the gain.
-- **What fp16 adds on top of batching (arm E).** Half precision and
-  batching both reduce per-request cost, and whether they compose or
-  overlap is not predictable from either alone.
+```bash
+python scripts/run_bench.py --device cuda --concurrencies 1,8,32,64     --workload-size 512 --repeats 3 --duration 20 --warmup 5
+```
 
-Record the numbers here with the exact command and GPU name once the run
-completes, and update the README's GPU section at the same time.
+Every cell is in `bench/results/gpu_t4.md`. The rows that carry the argument:
+
+| Arm | Conc. | RPS | p50 ms | p95 ms | Mean batch | GPU % |
+|---|---:|---:|---:|---:|---:|---:|
+| A: no batching | 1 | 143.4 (SE 0.7) | 6.4 | 9.8 | 1.00 | 26.9 |
+| B: cap 8, no wait | 1 | 144.2 (SE 0.7) | 6.3 | 9.6 | 1.00 | 27.0 |
+| C: cap 8, 5 ms wait | 1 | 83.0 (SE 0.0) | 11.3 | 15.3 | 1.00 | 15.6 |
+| A: no batching | 8 | 143.5 (SE 0.6) | 50.9 | 76.8 | 1.00 | 27.6 |
+| B: cap 8, no wait | 8 | **336.6** (SE 0.4) | **21.4** | **35.5** | 3.89 | 25.7 |
+| C: cap 8, 5 ms wait | 8 | 326.5 (SE 2.0) | 24.0 | 36.4 | 4.70 | 24.3 |
+| D: cap 32, 5 ms wait | 8 | 308.1 (SE 2.3) | 25.5 | 39.2 | 4.67 | 23.1 |
+| E: cap 32, 5 ms, fp16 | 8 | 327.9 (SE 1.2) | 24.3 | 36.5 | 4.77 | **11.9** |
+| A: no batching | 32 | 139.9 (SE 0.8) | 209.5 | 304.6 | 1.00 | 27.0 |
+| B: cap 8, no wait | 32 | 168.5 (SE 3.8) | 104.3 | 600.8 | **1.96** | 19.6 |
+| C: cap 8, 5 ms wait | 32 | **220.0** (SE 4.3) | 78.2 | 462.3 | 3.79 | 17.0 |
+
+### Batching improves throughput and median latency together
+
+At concurrency 8, arm B does **2.3x** the throughput of arm A (336.6 against
+143.5 RPS) at **2.4x lower** median latency (21.4 ms against 50.9 ms). It is
+not a trade.
+
+Arm A is why. Its throughput is flat at roughly 143 RPS from concurrency 1
+to 32 while its median latency grows from 6.4 ms to 209.5 ms, a 33x increase
+for no throughput at all. Every request after the first is queued behind a
+forward pass it could have shared.
+
+### The GPU was never the limit, and fp16 is the proof
+
+**Mean GPU utilisation never exceeded 27.6% in any of the 20 cells**, and the
+highest instantaneous sample across the whole grid was 33%. That is
+suggestive but not conclusive on its own, because `nvidia-smi` reports the
+fraction of time a kernel was resident, not how much of the device that
+kernel used.
+
+Arm E settles it. It is arm D in half precision, and it did what half
+precision is supposed to do: mean utilisation fell from 23.1% to 11.9% and
+peak memory from 265 MiB to 217 MiB. **The device's work was roughly halved
+and throughput rose 6%** (327.9 against 308.1 RPS, combined SE 2.6) rather
+than approaching the near-doubling a device-bound server would show.
+
+This is the most operationally useful result on this page. A team told their
+embedding service is slow will reach for a faster GPU, a smaller model, or
+quantisation. On this workload all three were available and none of them was
+the answer, because the forward pass is small and the cost is in getting
+requests to it. **The intervention that paid 2.3x cost nothing but a queue.**
+
+### Past concurrency 8, achieved batch size falls as load rises
+
+Arm B peaks at concurrency 8 and then degrades: 336.6 RPS to 168.5 at
+concurrency 32, with p95 rising from 35.5 ms to 600.8 ms. Its achieved batch
+size falls at the same time, 3.89 to 1.96.
+
+That direction is backwards. More concurrent clients should mean fuller
+batches, not emptier ones, and the collapse is therefore not the batcher
+running out of room. Combined with flat GPU utilisation, it places the
+bottleneck inside the server process rather than on the device. **The
+specific mechanism is not isolated here** and would need per-stage timing to
+pin down; the single-threaded request path and the GIL are the obvious
+suspects and are untested.
+
+### The queue delay is insurance priced at 42%
+
+Separating the batch cap from the queue delay is what makes the two arms
+worth running, and they behave differently at every load:
+
+| | Conc. 1 | Conc. 8 | Conc. 32 | Conc. 64 |
+|---|---:|---:|---:|---:|
+| B: cap only, no wait | 144.2 | **336.6** | 168.5 | 145.4 |
+| C: cap plus 5 ms wait | 83.0 | 326.5 | **220.0** | **160.8** |
+
+The cap is free. Arm B matches arm A exactly at concurrency 1 (144.2 against
+143.4), because a cap that is never reached costs nothing, and it is the
+fastest arm in the grid at concurrency 8.
+
+The delay is not free. It costs **42%** of idle throughput, for the reason
+section 1 gives on CPU: the server waits 5 ms for a second request that a
+single client cannot supply, then runs a batch of one. But it is the only
+thing that holds batch size up under overload, 3.79 against 1.96 at
+concurrency 32, and it buys **31% more throughput** there.
+
+So the delay is insurance against overload, and 42% of idle throughput is
+its premium. Which way that priced trade goes depends on whether the service
+spends more of its life idle or saturated, and that is a traffic question,
+not a serving question.
+
+### A prediction this grid refuted
+
+Section 3 of an earlier revision predicted the crossover would **move left**
+on a GPU, since a GPU's cost per batch is flatter in batch size than a CPU's.
+
+It did not move. Arm C costs 42% of throughput at concurrency 1 on the T4
+against 44% on the CPU, which is the same answer. The prediction treated
+"batching" as one knob; the grid shows the cap and the delay are separate
+knobs and only the delay has a crossover at all. The practical conclusion
+the prediction was reaching for does hold, but for a different reason than
+it gave: batching is worth enabling by default on this GPU because the cap
+is free, not because a GPU moved the crossover.
+
+### What this grid does not answer
+
+Arm E measures speed and memory only; no accuracy check was run on fp16, so
+"half precision was free" is a statement about throughput, not about
+embedding quality. Section 5 lists the rest.
 
 ## 4. A larger batch can mean a worse server
 

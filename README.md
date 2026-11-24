@@ -1,12 +1,20 @@
 # gpu-batch-serve: what dynamic batching actually buys
 
-**Dynamic batching is sold as a throughput win. It is really a trade: a
-latency cost paid on every request in exchange for a throughput gain that
-only arrives once traffic is concurrent enough to fill a batch. Below the
-crossover the cost is all you get. On CPU at concurrency 1, turning
-batching on cost 44% of throughput and nearly doubled median latency, and
-the mean batch size never rose above 1.0 — the server waited for company
-that never came.**
+**Dynamic batching is sold as one switch. It is two, and they are priced
+very differently. The batch cap is free: on a Tesla T4 it cost nothing at
+concurrency 1 and returned 2.3x throughput at 2.4x lower median latency at
+concurrency 8. The queue delay is the switch that trades, and it costs 42%
+of idle throughput to buy 31% more under overload. Conflating them is how
+a service ends up paying a latency tax for a throughput gain it is not
+getting: with the delay on and one client calling, mean batch size never
+rose above 1.0 and the server waited for company that never came.**
+
+**A second result outranks both.** Mean GPU utilisation never exceeded
+27.6% in any of 20 cells, and running the model in half precision roughly
+halved the device's work for 6% more throughput. The GPU was not what the
+server was waiting on, so the fast card, the smaller model and the
+quantisation were all the wrong lever. The one that paid cost nothing but
+a queue.
 
 An embedding service is the clearest place to measure this, because one
 request is one small forward pass and a GPU is nowhere near saturated by
@@ -61,7 +69,7 @@ to establish the crossover exists, not enough for standard errors.
 | A: no batching | 8 | 120.3 | 62.9 | 84.9 | 1.0 |
 | C: batch 8, 5 ms | 8 | **241.0** | 33.2 | **37.3** | **8.0** |
 
-Two things in that table are the whole point of the project:
+Two things in that table set up everything that follows:
 
 1. **At concurrency 1, batching is pure cost.** Throughput fell 44% and
    median latency rose 85%, and the mean batch size column explains why:
@@ -77,15 +85,39 @@ Two things in that table are the whole point of the project:
    server is the bottleneck, the queue in front of an unbatched server is
    a worse source of latency than the batch delay ever was.
 
-### GPU run
+### GPU run: the gain is 2.3x and the GPU is not the bottleneck
 
-**Not yet measured.** The harness is GPU-ready and `notebooks/colab_run.ipynb`
-runs the full grid on a Colab T4, including GPU utilisation sampling and
-the fp16 arm, which cannot run on CPU. Until that run is recorded in
-[docs/FINDINGS.md](docs/FINDINGS.md), every number in this README is a CPU
-number and the fp16 arm is unevaluated. The expectation is that the
-crossover moves *left* on a GPU, because a GPU's cost per batch is flatter
-in batch size than a CPU's, but an expectation is not a measurement.
+Measured on a Colab **Tesla T4**: 5 arms x 4 concurrencies x 3 repeats,
+222,333 requests, 0 failed. Full table in
+[`bench/results/gpu_t4.md`](bench/results/gpu_t4.md), analysis in
+[docs/FINDINGS.md](docs/FINDINGS.md#3-on-a-gpu-the-gain-is-23x-and-the-gpu-is-not-what-limits-it).
+
+3. **Batching was worth 2.3x throughput at 2.4x lower median latency**
+   (336.6 against 143.5 RPS, p50 21.4 ms against 50.9 ms, concurrency 8).
+   Unbatched throughput was flat at ~143 RPS from concurrency 1 to 32 while
+   its median latency grew 33x, which is what a queue in front of a small
+   forward pass looks like.
+
+4. **Mean GPU utilisation never exceeded 27.6% in any of the 20 cells, and
+   the fp16 arm proves that was the real story rather than a reporting
+   artefact.** Half precision cut device utilisation from 23.1% to 11.9%
+   and peak memory from 265 MiB to 217 MiB, and returned 6% throughput
+   instead of the near-doubling a device-bound server would show. Roughly
+   halving the GPU's work bought almost nothing, because the GPU was not
+   what the server was waiting on.
+
+5. **The batch cap is free; the queue delay is insurance.** A cap that is
+   never reached costs nothing (144.2 against 143.4 RPS at concurrency 1),
+   so batching is worth enabling by default here. The 5 ms delay costs 42%
+   of idle throughput, and is the only thing that keeps batches filling
+   under overload, where it returns 31%. Whether that premium is worth
+   paying is a question about traffic, not about serving.
+
+This grid also refuted the expectation stated here before it ran, that the
+crossover would move *left* on a GPU. It did not move: enabling the delay
+costs 42% of idle throughput on the T4 against 44% on CPU, the same answer.
+The prediction treated batching as one knob, and the grid shows the cap and
+the delay are two, only one of which has a crossover.
 
 ## Part two: is a hand-rolled batcher worth keeping?
 

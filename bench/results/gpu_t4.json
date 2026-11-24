@@ -1,0 +1,2422 @@
+{
+  "meta": {
+    "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+    "device": "cuda",
+    "workload_size": 512,
+    "seed": 17,
+    "duration_seconds": 20.0,
+    "warmup_seconds": 5.0,
+    "repeats": 3,
+    "concurrencies": [
+      1,
+      8,
+      32,
+      64
+    ],
+    "started_at": 1795468832.4465754,
+    "elapsed_seconds": 1570.0,
+    "gpu_name": "Tesla T4"
+  },
+  "cells": [
+    {
+      "arm": "A: no batching",
+      "note": "one request, one forward pass",
+      "max_batch_size": 1,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 1,
+      "runs": [
+        {
+          "concurrency": 1,
+          "completed": 2893,
+          "failed": 0,
+          "wall_seconds": 20.003,
+          "throughput_rps": 144.63,
+          "latency_ms": {
+            "p50": 6.34,
+            "p95": 9.73,
+            "p99": 12.61,
+            "mean": 6.91
+          },
+          "batching": {
+            "batches": 2893,
+            "requests": 2893,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 15.3643
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 26.7,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 2842,
+          "failed": 0,
+          "wall_seconds": 20.002,
+          "throughput_rps": 142.09,
+          "latency_ms": {
+            "p50": 6.43,
+            "p95": 9.81,
+            "p99": 13.2,
+            "mean": 7.04
+          },
+          "batching": {
+            "batches": 2842,
+            "requests": 2842,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 15.3517
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 26.7,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 2868,
+          "failed": 0,
+          "wall_seconds": 20.002,
+          "throughput_rps": 143.39,
+          "latency_ms": {
+            "p50": 6.33,
+            "p95": 9.73,
+            "p99": 13.25,
+            "mean": 6.97
+          },
+          "batching": {
+            "batches": 2868,
+            "requests": 2868,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 15.3329
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 27.2,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 143.37,
+          "stderr": 0.733,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 6.367,
+          "stderr": 0.032,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 9.757,
+          "stderr": 0.027,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 13.02,
+          "stderr": 0.206,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 26.867,
+          "stderr": 0.167,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "A: no batching",
+      "note": "one request, one forward pass",
+      "max_batch_size": 1,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 8,
+      "runs": [
+        {
+          "concurrency": 8,
+          "completed": 2899,
+          "failed": 0,
+          "wall_seconds": 20.039,
+          "throughput_rps": 144.67,
+          "latency_ms": {
+            "p50": 50.76,
+            "p95": 75.07,
+            "p99": 87.27,
+            "mean": 55.24
+          },
+          "batching": {
+            "batches": 2899,
+            "requests": 2899,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 19.9969
+          },
+          "gpu": {
+            "samples": 88,
+            "mean_utilization_pct": 27.6,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 2862,
+          "failed": 0,
+          "wall_seconds": 20.046,
+          "throughput_rps": 142.77,
+          "latency_ms": {
+            "p50": 50.93,
+            "p95": 76.97,
+            "p99": 90.73,
+            "mean": 55.97
+          },
+          "batching": {
+            "batches": 2862,
+            "requests": 2862,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 20.0021
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 27.6,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 2865,
+          "failed": 0,
+          "wall_seconds": 20.042,
+          "throughput_rps": 142.95,
+          "latency_ms": {
+            "p50": 51.08,
+            "p95": 78.32,
+            "p99": 87.91,
+            "mean": 55.9
+          },
+          "batching": {
+            "batches": 2865,
+            "requests": 2865,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 19.9974
+          },
+          "gpu": {
+            "samples": 88,
+            "mean_utilization_pct": 27.5,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 143.463,
+          "stderr": 0.606,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 50.923,
+          "stderr": 0.092,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 76.787,
+          "stderr": 0.943,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 88.637,
+          "stderr": 1.063,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 27.567,
+          "stderr": 0.033,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "A: no batching",
+      "note": "one request, one forward pass",
+      "max_batch_size": 1,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 32,
+      "runs": [
+        {
+          "concurrency": 32,
+          "completed": 2841,
+          "failed": 0,
+          "wall_seconds": 20.176,
+          "throughput_rps": 140.81,
+          "latency_ms": {
+            "p50": 208.21,
+            "p95": 308.35,
+            "p99": 337.22,
+            "mean": 226.16
+          },
+          "batching": {
+            "batches": 2841,
+            "requests": 2841,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 20.1164
+          },
+          "gpu": {
+            "samples": 88,
+            "mean_utilization_pct": 26.9,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 2834,
+          "failed": 0,
+          "wall_seconds": 20.183,
+          "throughput_rps": 140.41,
+          "latency_ms": {
+            "p50": 208.96,
+            "p95": 304.25,
+            "p99": 324.68,
+            "mean": 226.77
+          },
+          "batching": {
+            "batches": 2834,
+            "requests": 2834,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 20.1164
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 27.2,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 2793,
+          "failed": 0,
+          "wall_seconds": 20.185,
+          "throughput_rps": 138.37,
+          "latency_ms": {
+            "p50": 211.47,
+            "p95": 301.32,
+            "p99": 344.71,
+            "mean": 230.1
+          },
+          "batching": {
+            "batches": 2793,
+            "requests": 2793,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 20.127
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 26.8,
+            "peak_utilization_pct": 33.0,
+            "peak_memory_mib": 263.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 139.863,
+          "stderr": 0.756,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 209.547,
+          "stderr": 0.986,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 304.64,
+          "stderr": 2.039,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 335.537,
+          "stderr": 5.843,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 26.967,
+          "stderr": 0.12,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "A: no batching",
+      "note": "one request, one forward pass",
+      "max_batch_size": 1,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 64,
+      "runs": [
+        {
+          "concurrency": 64,
+          "completed": 2499,
+          "failed": 0,
+          "wall_seconds": 20.401,
+          "throughput_rps": 122.49,
+          "latency_ms": {
+            "p50": 427.0,
+            "p95": 925.72,
+            "p99": 2357.05,
+            "mean": 516.27
+          },
+          "batching": {
+            "batches": 2499,
+            "requests": 2499,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 18.713
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 24.8,
+            "peak_utilization_pct": 33.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 2502,
+          "failed": 0,
+          "wall_seconds": 20.375,
+          "throughput_rps": 122.79,
+          "latency_ms": {
+            "p50": 424.11,
+            "p95": 963.64,
+            "p99": 2477.6,
+            "mean": 515.23
+          },
+          "batching": {
+            "batches": 2502,
+            "requests": 2502,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 18.9077
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 24.7,
+            "peak_utilization_pct": 33.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 2503,
+          "failed": 0,
+          "wall_seconds": 20.393,
+          "throughput_rps": 122.74,
+          "latency_ms": {
+            "p50": 425.47,
+            "p95": 1007.26,
+            "p99": 2337.01,
+            "mean": 515.38
+          },
+          "batching": {
+            "batches": 2503,
+            "requests": 2503,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 18.8786
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 24.6,
+            "peak_utilization_pct": 32.0,
+            "peak_memory_mib": 263.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 122.673,
+          "stderr": 0.093,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 425.527,
+          "stderr": 0.835,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 965.54,
+          "stderr": 23.558,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 2390.553,
+          "stderr": 43.906,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 24.7,
+          "stderr": 0.058,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "B: batch 8, no wait",
+      "note": "coalesce only what is already queued",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 1,
+      "runs": [
+        {
+          "concurrency": 1,
+          "completed": 2876,
+          "failed": 0,
+          "wall_seconds": 20.007,
+          "throughput_rps": 143.75,
+          "latency_ms": {
+            "p50": 6.33,
+            "p95": 9.67,
+            "p99": 12.69,
+            "mean": 6.96
+          },
+          "batching": {
+            "batches": 2876,
+            "requests": 2876,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 15.3445
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 27.0,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 2865,
+          "failed": 0,
+          "wall_seconds": 20.001,
+          "throughput_rps": 143.24,
+          "latency_ms": {
+            "p50": 6.38,
+            "p95": 9.66,
+            "p99": 13.13,
+            "mean": 6.98
+          },
+          "batching": {
+            "batches": 2865,
+            "requests": 2865,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 15.3651
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 27.0,
+            "peak_utilization_pct": 30.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 2912,
+          "failed": 0,
+          "wall_seconds": 20.0,
+          "throughput_rps": 145.6,
+          "latency_ms": {
+            "p50": 6.34,
+            "p95": 9.43,
+            "p99": 12.2,
+            "mean": 6.87
+          },
+          "batching": {
+            "batches": 2912,
+            "requests": 2912,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 15.35
+          },
+          "gpu": {
+            "samples": 89,
+            "mean_utilization_pct": 27.1,
+            "peak_utilization_pct": 30.0,
+            "peak_memory_mib": 263.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 144.197,
+          "stderr": 0.717,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 6.35,
+          "stderr": 0.015,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 9.587,
+          "stderr": 0.078,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 12.673,
+          "stderr": 0.269,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 27.033,
+          "stderr": 0.033,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "B: batch 8, no wait",
+      "note": "coalesce only what is already queued",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 8,
+      "runs": [
+        {
+          "concurrency": 8,
+          "completed": 6720,
+          "failed": 0,
+          "wall_seconds": 20.011,
+          "throughput_rps": 335.81,
+          "latency_ms": {
+            "p50": 21.45,
+            "p95": 35.73,
+            "p99": 46.55,
+            "mean": 23.82
+          },
+          "batching": {
+            "batches": 1722,
+            "requests": 6720,
+            "mean_batch_size": 3.902,
+            "max_observed_batch_size": 7,
+            "inference_seconds": 19.9094
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 25.5,
+            "peak_utilization_pct": 30.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6737,
+          "failed": 0,
+          "wall_seconds": 20.01,
+          "throughput_rps": 336.68,
+          "latency_ms": {
+            "p50": 21.36,
+            "p95": 35.47,
+            "p99": 47.43,
+            "mean": 23.75
+          },
+          "batching": {
+            "batches": 1741,
+            "requests": 6737,
+            "mean_batch_size": 3.87,
+            "max_observed_batch_size": 7,
+            "inference_seconds": 19.872
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 25.7,
+            "peak_utilization_pct": 30.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6751,
+          "failed": 0,
+          "wall_seconds": 20.014,
+          "throughput_rps": 337.31,
+          "latency_ms": {
+            "p50": 21.38,
+            "p95": 35.25,
+            "p99": 46.0,
+            "mean": 23.71
+          },
+          "batching": {
+            "batches": 1737,
+            "requests": 6751,
+            "mean_batch_size": 3.887,
+            "max_observed_batch_size": 7,
+            "inference_seconds": 19.9147
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 26.0,
+            "peak_utilization_pct": 31.0,
+            "peak_memory_mib": 265.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 336.6,
+          "stderr": 0.435,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 21.397,
+          "stderr": 0.027,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 35.483,
+          "stderr": 0.139,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 46.66,
+          "stderr": 0.416,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 3.886,
+          "stderr": 0.009,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 25.733,
+          "stderr": 0.145,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "B: batch 8, no wait",
+      "note": "coalesce only what is already queued",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 32,
+      "runs": [
+        {
+          "concurrency": 32,
+          "completed": 3455,
+          "failed": 0,
+          "wall_seconds": 20.138,
+          "throughput_rps": 171.57,
+          "latency_ms": {
+            "p50": 100.5,
+            "p95": 584.94,
+            "p99": 1001.19,
+            "mean": 185.93
+          },
+          "batching": {
+            "batches": 1792,
+            "requests": 3455,
+            "mean_batch_size": 1.928,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 19.5158
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 19.6,
+            "peak_utilization_pct": 28.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 3235,
+          "failed": 0,
+          "wall_seconds": 20.091,
+          "throughput_rps": 161.02,
+          "latency_ms": {
+            "p50": 115.05,
+            "p95": 615.31,
+            "p99": 1023.19,
+            "mean": 198.29
+          },
+          "batching": {
+            "batches": 1724,
+            "requests": 3235,
+            "mean_batch_size": 1.876,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 19.162
+          },
+          "gpu": {
+            "samples": 84,
+            "mean_utilization_pct": 19.2,
+            "peak_utilization_pct": 25.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 3478,
+          "failed": 0,
+          "wall_seconds": 20.098,
+          "throughput_rps": 173.05,
+          "latency_ms": {
+            "p50": 97.47,
+            "p95": 602.0,
+            "p99": 1001.92,
+            "mean": 184.41
+          },
+          "batching": {
+            "batches": 1687,
+            "requests": 3478,
+            "mean_batch_size": 2.062,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 19.5751
+          },
+          "gpu": {
+            "samples": 84,
+            "mean_utilization_pct": 19.9,
+            "peak_utilization_pct": 26.0,
+            "peak_memory_mib": 265.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 168.547,
+          "stderr": 3.788,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 104.34,
+          "stderr": 5.426,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 600.75,
+          "stderr": 8.789,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 1008.767,
+          "stderr": 7.215,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.955,
+          "stderr": 0.055,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 19.567,
+          "stderr": 0.203,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "B: batch 8, no wait",
+      "note": "coalesce only what is already queued",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 0.0,
+      "precision": "fp32",
+      "concurrency": 64,
+      "runs": [
+        {
+          "concurrency": 64,
+          "completed": 2628,
+          "failed": 0,
+          "wall_seconds": 20.19,
+          "throughput_rps": 130.17,
+          "latency_ms": {
+            "p50": 315.48,
+            "p95": 1478.44,
+            "p99": 2455.13,
+            "mean": 488.95
+          },
+          "batching": {
+            "batches": 1566,
+            "requests": 2628,
+            "mean_batch_size": 1.678,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 16.871
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 16.8,
+            "peak_utilization_pct": 25.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 3237,
+          "failed": 0,
+          "wall_seconds": 20.244,
+          "throughput_rps": 159.9,
+          "latency_ms": {
+            "p50": 266.72,
+            "p95": 1214.96,
+            "p99": 2045.78,
+            "mean": 397.77
+          },
+          "batching": {
+            "batches": 1529,
+            "requests": 3237,
+            "mean_batch_size": 2.117,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 18.4495
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 17.5,
+            "peak_utilization_pct": 27.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 2993,
+          "failed": 0,
+          "wall_seconds": 20.495,
+          "throughput_rps": 146.03,
+          "latency_ms": {
+            "p50": 275.0,
+            "p95": 1400.85,
+            "p99": 2351.66,
+            "mean": 432.88
+          },
+          "batching": {
+            "batches": 1545,
+            "requests": 2993,
+            "mean_batch_size": 1.937,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 17.8505
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 16.9,
+            "peak_utilization_pct": 25.0,
+            "peak_memory_mib": 273.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 145.367,
+          "stderr": 8.589,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 285.733,
+          "stderr": 15.064,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 1364.75,
+          "stderr": 78.173,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 2284.19,
+          "stderr": 122.89,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.911,
+          "stderr": 0.127,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 17.067,
+          "stderr": 0.219,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "C: batch 8, 5ms wait",
+      "note": "grant a partial batch a grace period",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 1,
+      "runs": [
+        {
+          "concurrency": 1,
+          "completed": 1659,
+          "failed": 0,
+          "wall_seconds": 20.001,
+          "throughput_rps": 82.95,
+          "latency_ms": {
+            "p50": 11.37,
+            "p95": 15.17,
+            "p99": 19.23,
+            "mean": 12.05
+          },
+          "batching": {
+            "batches": 1659,
+            "requests": 1659,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.752
+          },
+          "gpu": {
+            "samples": 91,
+            "mean_utilization_pct": 15.4,
+            "peak_utilization_pct": 17.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 1660,
+          "failed": 0,
+          "wall_seconds": 20.005,
+          "throughput_rps": 82.98,
+          "latency_ms": {
+            "p50": 11.37,
+            "p95": 15.15,
+            "p99": 18.14,
+            "mean": 12.05
+          },
+          "batching": {
+            "batches": 1660,
+            "requests": 1660,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.7626
+          },
+          "gpu": {
+            "samples": 91,
+            "mean_utilization_pct": 15.8,
+            "peak_utilization_pct": 18.0,
+            "peak_memory_mib": 263.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 1660,
+          "failed": 0,
+          "wall_seconds": 20.003,
+          "throughput_rps": 82.99,
+          "latency_ms": {
+            "p50": 11.28,
+            "p95": 15.46,
+            "p99": 19.73,
+            "mean": 12.05
+          },
+          "batching": {
+            "batches": 1660,
+            "requests": 1660,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.778
+          },
+          "gpu": {
+            "samples": 91,
+            "mean_utilization_pct": 15.7,
+            "peak_utilization_pct": 17.0,
+            "peak_memory_mib": 263.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 82.973,
+          "stderr": 0.012,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 11.34,
+          "stderr": 0.03,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 15.26,
+          "stderr": 0.1,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 19.033,
+          "stderr": 0.469,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 15.633,
+          "stderr": 0.12,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "C: batch 8, 5ms wait",
+      "note": "grant a partial batch a grace period",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 8,
+      "runs": [
+        {
+          "concurrency": 8,
+          "completed": 6462,
+          "failed": 0,
+          "wall_seconds": 20.025,
+          "throughput_rps": 322.69,
+          "latency_ms": {
+            "p50": 24.12,
+            "p95": 36.63,
+            "p99": 43.85,
+            "mean": 24.78
+          },
+          "batching": {
+            "batches": 1372,
+            "requests": 6462,
+            "mean_batch_size": 4.71,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 12.0425
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 24.1,
+            "peak_utilization_pct": 28.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6552,
+          "failed": 0,
+          "wall_seconds": 20.037,
+          "throughput_rps": 326.99,
+          "latency_ms": {
+            "p50": 24.07,
+            "p95": 36.47,
+            "p99": 43.07,
+            "mean": 24.45
+          },
+          "batching": {
+            "batches": 1403,
+            "requests": 6552,
+            "mean_batch_size": 4.67,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 12.1457
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 24.5,
+            "peak_utilization_pct": 28.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6597,
+          "failed": 0,
+          "wall_seconds": 20.009,
+          "throughput_rps": 329.71,
+          "latency_ms": {
+            "p50": 23.86,
+            "p95": 36.21,
+            "p99": 44.23,
+            "mean": 24.26
+          },
+          "batching": {
+            "batches": 1395,
+            "requests": 6597,
+            "mean_batch_size": 4.729,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 12.0732
+          },
+          "gpu": {
+            "samples": 88,
+            "mean_utilization_pct": 24.2,
+            "peak_utilization_pct": 28.0,
+            "peak_memory_mib": 265.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 326.463,
+          "stderr": 2.044,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 24.017,
+          "stderr": 0.08,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 36.437,
+          "stderr": 0.122,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 43.717,
+          "stderr": 0.341,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 4.703,
+          "stderr": 0.017,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 24.267,
+          "stderr": 0.12,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "C: batch 8, 5ms wait",
+      "note": "grant a partial batch a grace period",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 32,
+      "runs": [
+        {
+          "concurrency": 32,
+          "completed": 4520,
+          "failed": 0,
+          "wall_seconds": 20.072,
+          "throughput_rps": 225.18,
+          "latency_ms": {
+            "p50": 72.94,
+            "p95": 472.11,
+            "p99": 803.53,
+            "mean": 141.83
+          },
+          "batching": {
+            "batches": 1162,
+            "requests": 4520,
+            "mean_batch_size": 3.89,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 13.9665
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 17.4,
+            "peak_utilization_pct": 24.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 4492,
+          "failed": 0,
+          "wall_seconds": 20.116,
+          "throughput_rps": 223.31,
+          "latency_ms": {
+            "p50": 80.26,
+            "p95": 443.04,
+            "p99": 709.11,
+            "mean": 142.91
+          },
+          "batching": {
+            "batches": 1168,
+            "requests": 4492,
+            "mean_batch_size": 3.846,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 14.0218
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 17.1,
+            "peak_utilization_pct": 24.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 4258,
+          "failed": 0,
+          "wall_seconds": 20.13,
+          "throughput_rps": 211.52,
+          "latency_ms": {
+            "p50": 81.55,
+            "p95": 471.78,
+            "p99": 786.18,
+            "mean": 150.77
+          },
+          "batching": {
+            "batches": 1169,
+            "requests": 4258,
+            "mean_batch_size": 3.642,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 13.9221
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 16.6,
+            "peak_utilization_pct": 27.0,
+            "peak_memory_mib": 265.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 220.003,
+          "stderr": 4.276,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 78.25,
+          "stderr": 2.681,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 462.31,
+          "stderr": 9.635,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 766.273,
+          "stderr": 29.017,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 3.793,
+          "stderr": 0.076,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 17.033,
+          "stderr": 0.233,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "C: batch 8, 5ms wait",
+      "note": "grant a partial batch a grace period",
+      "max_batch_size": 8,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 64,
+      "runs": [
+        {
+          "concurrency": 64,
+          "completed": 3610,
+          "failed": 0,
+          "wall_seconds": 20.257,
+          "throughput_rps": 178.21,
+          "latency_ms": {
+            "p50": 226.32,
+            "p95": 1119.09,
+            "p99": 1864.81,
+            "mean": 356.77
+          },
+          "batching": {
+            "batches": 1170,
+            "requests": 3610,
+            "mean_batch_size": 3.085,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 13.4227
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 14.7,
+            "peak_utilization_pct": 23.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 3179,
+          "failed": 0,
+          "wall_seconds": 20.201,
+          "throughput_rps": 157.37,
+          "latency_ms": {
+            "p50": 257.31,
+            "p95": 1285.71,
+            "p99": 2256.4,
+            "mean": 404.38
+          },
+          "batching": {
+            "batches": 1142,
+            "requests": 3179,
+            "mean_batch_size": 2.784,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 12.7562
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 13.7,
+            "peak_utilization_pct": 23.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 2993,
+          "failed": 0,
+          "wall_seconds": 20.386,
+          "throughput_rps": 146.81,
+          "latency_ms": {
+            "p50": 274.6,
+            "p95": 1354.96,
+            "p99": 2375.59,
+            "mean": 431.58
+          },
+          "batching": {
+            "batches": 1097,
+            "requests": 2993,
+            "mean_batch_size": 2.728,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 12.4517
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 13.6,
+            "peak_utilization_pct": 22.0,
+            "peak_memory_mib": 265.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 160.797,
+          "stderr": 9.225,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 252.743,
+          "stderr": 14.123,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 1253.253,
+          "stderr": 69.997,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 2165.6,
+          "stderr": 154.281,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 2.866,
+          "stderr": 0.111,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 14.0,
+          "stderr": 0.351,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "D: batch 32, 5ms wait",
+      "note": "wider cap, same grace period",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 1,
+      "runs": [
+        {
+          "concurrency": 1,
+          "completed": 1639,
+          "failed": 0,
+          "wall_seconds": 20.0,
+          "throughput_rps": 81.95,
+          "latency_ms": {
+            "p50": 11.45,
+            "p95": 15.46,
+            "p99": 20.52,
+            "mean": 12.2
+          },
+          "batching": {
+            "batches": 1639,
+            "requests": 1639,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.8575
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 15.4,
+            "peak_utilization_pct": 17.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 1650,
+          "failed": 0,
+          "wall_seconds": 20.0,
+          "throughput_rps": 82.5,
+          "latency_ms": {
+            "p50": 11.37,
+            "p95": 15.32,
+            "p99": 19.84,
+            "mean": 12.12
+          },
+          "batching": {
+            "batches": 1650,
+            "requests": 1650,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.8048
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 15.6,
+            "peak_utilization_pct": 17.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 1654,
+          "failed": 0,
+          "wall_seconds": 20.006,
+          "throughput_rps": 82.68,
+          "latency_ms": {
+            "p50": 11.34,
+            "p95": 15.44,
+            "p99": 19.52,
+            "mean": 12.09
+          },
+          "batching": {
+            "batches": 1654,
+            "requests": 1654,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.7904
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 15.8,
+            "peak_utilization_pct": 17.0,
+            "peak_memory_mib": 265.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 82.377,
+          "stderr": 0.22,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 11.387,
+          "stderr": 0.033,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 15.407,
+          "stderr": 0.044,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 19.96,
+          "stderr": 0.295,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 15.6,
+          "stderr": 0.115,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "D: batch 32, 5ms wait",
+      "note": "wider cap, same grace period",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 8,
+      "runs": [
+        {
+          "concurrency": 8,
+          "completed": 6247,
+          "failed": 0,
+          "wall_seconds": 20.015,
+          "throughput_rps": 312.11,
+          "latency_ms": {
+            "p50": 25.18,
+            "p95": 38.85,
+            "p99": 46.8,
+            "mean": 25.62
+          },
+          "batching": {
+            "batches": 1331,
+            "requests": 6247,
+            "mean_batch_size": 4.693,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 11.9573
+          },
+          "gpu": {
+            "samples": 88,
+            "mean_utilization_pct": 23.2,
+            "peak_utilization_pct": 28.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6091,
+          "failed": 0,
+          "wall_seconds": 20.02,
+          "throughput_rps": 304.24,
+          "latency_ms": {
+            "p50": 25.68,
+            "p95": 40.16,
+            "p99": 51.09,
+            "mean": 26.29
+          },
+          "batching": {
+            "batches": 1306,
+            "requests": 6091,
+            "mean_batch_size": 4.664,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 12.0583
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 22.9,
+            "peak_utilization_pct": 27.0,
+            "peak_memory_mib": 265.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6164,
+          "failed": 0,
+          "wall_seconds": 20.017,
+          "throughput_rps": 307.94,
+          "latency_ms": {
+            "p50": 25.55,
+            "p95": 38.68,
+            "p99": 45.98,
+            "mean": 25.97
+          },
+          "batching": {
+            "batches": 1322,
+            "requests": 6164,
+            "mean_batch_size": 4.663,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 12.0365
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 23.3,
+            "peak_utilization_pct": 27.0,
+            "peak_memory_mib": 265.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 308.097,
+          "stderr": 2.273,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 25.47,
+          "stderr": 0.15,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 39.23,
+          "stderr": 0.468,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 47.957,
+          "stderr": 1.584,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 4.673,
+          "stderr": 0.01,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 23.133,
+          "stderr": 0.12,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "D: batch 32, 5ms wait",
+      "note": "wider cap, same grace period",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 32,
+      "runs": [
+        {
+          "concurrency": 32,
+          "completed": 4035,
+          "failed": 0,
+          "wall_seconds": 20.096,
+          "throughput_rps": 200.79,
+          "latency_ms": {
+            "p50": 83.94,
+            "p95": 523.39,
+            "p99": 910.47,
+            "mean": 158.99
+          },
+          "batching": {
+            "batches": 1092,
+            "requests": 4035,
+            "mean_batch_size": 3.695,
+            "max_observed_batch_size": 24,
+            "inference_seconds": 14.0174
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 16.5,
+            "peak_utilization_pct": 23.0,
+            "peak_memory_mib": 269.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 3365,
+          "failed": 0,
+          "wall_seconds": 20.133,
+          "throughput_rps": 167.14,
+          "latency_ms": {
+            "p50": 103.3,
+            "p95": 602.87,
+            "p99": 1013.83,
+            "mean": 190.88
+          },
+          "batching": {
+            "batches": 1071,
+            "requests": 3365,
+            "mean_batch_size": 3.142,
+            "max_observed_batch_size": 20,
+            "inference_seconds": 14.0969
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 15.3,
+            "peak_utilization_pct": 23.0,
+            "peak_memory_mib": 269.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 4356,
+          "failed": 0,
+          "wall_seconds": 20.21,
+          "throughput_rps": 215.53,
+          "latency_ms": {
+            "p50": 83.63,
+            "p95": 470.73,
+            "p99": 785.39,
+            "mean": 147.7
+          },
+          "batching": {
+            "batches": 1087,
+            "requests": 4356,
+            "mean_batch_size": 4.007,
+            "max_observed_batch_size": 24,
+            "inference_seconds": 14.1621
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 17.0,
+            "peak_utilization_pct": 22.0,
+            "peak_memory_mib": 269.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 194.487,
+          "stderr": 14.32,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 90.29,
+          "stderr": 6.506,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 532.33,
+          "stderr": 38.407,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 903.23,
+          "stderr": 66.044,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 3.615,
+          "stderr": 0.253,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 16.267,
+          "stderr": 0.504,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "D: batch 32, 5ms wait",
+      "note": "wider cap, same grace period",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp32",
+      "concurrency": 64,
+      "runs": [
+        {
+          "concurrency": 64,
+          "completed": 4087,
+          "failed": 0,
+          "wall_seconds": 20.407,
+          "throughput_rps": 200.27,
+          "latency_ms": {
+            "p50": 198.88,
+            "p95": 994.96,
+            "p99": 1569.68,
+            "mean": 316.52
+          },
+          "batching": {
+            "batches": 1142,
+            "requests": 4087,
+            "mean_batch_size": 3.579,
+            "max_observed_batch_size": 17,
+            "inference_seconds": 14.0795
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 15.4,
+            "peak_utilization_pct": 24.0,
+            "peak_memory_mib": 289.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 3843,
+          "failed": 0,
+          "wall_seconds": 20.418,
+          "throughput_rps": 188.21,
+          "latency_ms": {
+            "p50": 197.12,
+            "p95": 1127.16,
+            "p99": 2031.87,
+            "mean": 336.46
+          },
+          "batching": {
+            "batches": 1109,
+            "requests": 3843,
+            "mean_batch_size": 3.465,
+            "max_observed_batch_size": 16,
+            "inference_seconds": 13.4688
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 14.8,
+            "peak_utilization_pct": 21.0,
+            "peak_memory_mib": 289.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 4032,
+          "failed": 0,
+          "wall_seconds": 20.727,
+          "throughput_rps": 194.53,
+          "latency_ms": {
+            "p50": 197.53,
+            "p95": 1056.4,
+            "p99": 1681.31,
+            "mean": 323.51
+          },
+          "batching": {
+            "batches": 1153,
+            "requests": 4032,
+            "mean_batch_size": 3.497,
+            "max_observed_batch_size": 21,
+            "inference_seconds": 13.9022
+          },
+          "gpu": {
+            "samples": 88,
+            "mean_utilization_pct": 15.2,
+            "peak_utilization_pct": 23.0,
+            "peak_memory_mib": 289.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 194.337,
+          "stderr": 3.483,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 197.843,
+          "stderr": 0.532,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 1059.507,
+          "stderr": 38.194,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 1760.953,
+          "stderr": 139.239,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 3.514,
+          "stderr": 0.034,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 15.133,
+          "stderr": 0.176,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "E: batch 32, 5ms, fp16",
+      "note": "half precision on top of D",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp16",
+      "concurrency": 1,
+      "runs": [
+        {
+          "concurrency": 1,
+          "completed": 1665,
+          "failed": 0,
+          "wall_seconds": 20.007,
+          "throughput_rps": 83.22,
+          "latency_ms": {
+            "p50": 11.42,
+            "p95": 14.96,
+            "p99": 19.16,
+            "mean": 12.01
+          },
+          "batching": {
+            "batches": 1665,
+            "requests": 1665,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.7597
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 8.5,
+            "peak_utilization_pct": 9.0,
+            "peak_memory_mib": 215.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 1681,
+          "failed": 0,
+          "wall_seconds": 20.005,
+          "throughput_rps": 84.03,
+          "latency_ms": {
+            "p50": 11.34,
+            "p95": 14.81,
+            "p99": 18.17,
+            "mean": 11.9
+          },
+          "batching": {
+            "batches": 1681,
+            "requests": 1681,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.7205
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 8.7,
+            "peak_utilization_pct": 9.0,
+            "peak_memory_mib": 215.0
+          }
+        },
+        {
+          "concurrency": 1,
+          "completed": 1688,
+          "failed": 0,
+          "wall_seconds": 20.001,
+          "throughput_rps": 84.4,
+          "latency_ms": {
+            "p50": 11.31,
+            "p95": 14.5,
+            "p99": 18.3,
+            "mean": 11.85
+          },
+          "batching": {
+            "batches": 1688,
+            "requests": 1688,
+            "mean_batch_size": 1.0,
+            "max_observed_batch_size": 1,
+            "inference_seconds": 8.6735
+          },
+          "gpu": {
+            "samples": 90,
+            "mean_utilization_pct": 8.7,
+            "peak_utilization_pct": 9.0,
+            "peak_memory_mib": 215.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 83.883,
+          "stderr": 0.348,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 11.357,
+          "stderr": 0.033,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 14.757,
+          "stderr": 0.135,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 18.543,
+          "stderr": 0.311,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 1.0,
+          "stderr": 0.0,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 8.633,
+          "stderr": 0.067,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "E: batch 32, 5ms, fp16",
+      "note": "half precision on top of D",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp16",
+      "concurrency": 8,
+      "runs": [
+        {
+          "concurrency": 8,
+          "completed": 6608,
+          "failed": 0,
+          "wall_seconds": 20.012,
+          "throughput_rps": 330.21,
+          "latency_ms": {
+            "p50": 24.22,
+            "p95": 35.59,
+            "p99": 44.49,
+            "mean": 24.22
+          },
+          "batching": {
+            "batches": 1383,
+            "requests": 6608,
+            "mean_batch_size": 4.778,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 11.6793
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 11.8,
+            "peak_utilization_pct": 14.0,
+            "peak_memory_mib": 217.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6528,
+          "failed": 0,
+          "wall_seconds": 20.014,
+          "throughput_rps": 326.17,
+          "latency_ms": {
+            "p50": 24.5,
+            "p95": 36.18,
+            "p99": 42.15,
+            "mean": 24.52
+          },
+          "batching": {
+            "batches": 1379,
+            "requests": 6528,
+            "mean_batch_size": 4.734,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 11.7614
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 12.0,
+            "peak_utilization_pct": 14.0,
+            "peak_memory_mib": 217.0
+          }
+        },
+        {
+          "concurrency": 8,
+          "completed": 6557,
+          "failed": 0,
+          "wall_seconds": 20.025,
+          "throughput_rps": 327.43,
+          "latency_ms": {
+            "p50": 24.15,
+            "p95": 37.82,
+            "p99": 46.43,
+            "mean": 24.41
+          },
+          "batching": {
+            "batches": 1370,
+            "requests": 6557,
+            "mean_batch_size": 4.786,
+            "max_observed_batch_size": 8,
+            "inference_seconds": 11.7671
+          },
+          "gpu": {
+            "samples": 88,
+            "mean_utilization_pct": 12.0,
+            "peak_utilization_pct": 15.0,
+            "peak_memory_mib": 217.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 327.937,
+          "stderr": 1.193,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 24.29,
+          "stderr": 0.107,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 36.53,
+          "stderr": 0.667,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 44.357,
+          "stderr": 1.237,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 4.766,
+          "stderr": 0.016,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 11.933,
+          "stderr": 0.067,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "E: batch 32, 5ms, fp16",
+      "note": "half precision on top of D",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp16",
+      "concurrency": 32,
+      "runs": [
+        {
+          "concurrency": 32,
+          "completed": 3871,
+          "failed": 0,
+          "wall_seconds": 20.132,
+          "throughput_rps": 192.29,
+          "latency_ms": {
+            "p50": 92.29,
+            "p95": 514.94,
+            "p99": 833.9,
+            "mean": 165.88
+          },
+          "batching": {
+            "batches": 1124,
+            "requests": 3871,
+            "mean_batch_size": 3.444,
+            "max_observed_batch_size": 24,
+            "inference_seconds": 13.8633
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 8.7,
+            "peak_utilization_pct": 13.0,
+            "peak_memory_mib": 217.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 4134,
+          "failed": 0,
+          "wall_seconds": 20.101,
+          "throughput_rps": 205.66,
+          "latency_ms": {
+            "p50": 83.5,
+            "p95": 520.08,
+            "p99": 866.37,
+            "mean": 155.09
+          },
+          "batching": {
+            "batches": 1106,
+            "requests": 4134,
+            "mean_batch_size": 3.738,
+            "max_observed_batch_size": 12,
+            "inference_seconds": 13.9967
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 9.0,
+            "peak_utilization_pct": 12.0,
+            "peak_memory_mib": 217.0
+          }
+        },
+        {
+          "concurrency": 32,
+          "completed": 3782,
+          "failed": 0,
+          "wall_seconds": 20.084,
+          "throughput_rps": 188.31,
+          "latency_ms": {
+            "p50": 92.03,
+            "p95": 543.9,
+            "p99": 901.39,
+            "mean": 169.56
+          },
+          "batching": {
+            "batches": 1068,
+            "requests": 3782,
+            "mean_batch_size": 3.541,
+            "max_observed_batch_size": 19,
+            "inference_seconds": 14.1779
+          },
+          "gpu": {
+            "samples": 85,
+            "mean_utilization_pct": 8.7,
+            "peak_utilization_pct": 12.0,
+            "peak_memory_mib": 217.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 195.42,
+          "stderr": 5.247,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 89.273,
+          "stderr": 2.888,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 526.307,
+          "stderr": 8.921,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 867.22,
+          "stderr": 19.487,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 3.574,
+          "stderr": 0.086,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 8.8,
+          "stderr": 0.1,
+          "n": 3
+        }
+      }
+    },
+    {
+      "arm": "E: batch 32, 5ms, fp16",
+      "note": "half precision on top of D",
+      "max_batch_size": 32,
+      "max_queue_delay_ms": 5.0,
+      "precision": "fp16",
+      "concurrency": 64,
+      "runs": [
+        {
+          "concurrency": 64,
+          "completed": 3095,
+          "failed": 0,
+          "wall_seconds": 20.561,
+          "throughput_rps": 150.53,
+          "latency_ms": {
+            "p50": 265.55,
+            "p95": 1344.21,
+            "p99": 2193.46,
+            "mean": 419.52
+          },
+          "batching": {
+            "batches": 1079,
+            "requests": 3095,
+            "mean_batch_size": 2.868,
+            "max_observed_batch_size": 32,
+            "inference_seconds": 13.3527
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 7.6,
+            "peak_utilization_pct": 12.0,
+            "peak_memory_mib": 219.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 2989,
+          "failed": 0,
+          "wall_seconds": 20.182,
+          "throughput_rps": 148.11,
+          "latency_ms": {
+            "p50": 277.61,
+            "p95": 1336.84,
+            "p99": 2267.86,
+            "mean": 430.16
+          },
+          "batching": {
+            "batches": 1083,
+            "requests": 2989,
+            "mean_batch_size": 2.76,
+            "max_observed_batch_size": 21,
+            "inference_seconds": 13.2775
+          },
+          "gpu": {
+            "samples": 86,
+            "mean_utilization_pct": 7.7,
+            "peak_utilization_pct": 11.0,
+            "peak_memory_mib": 219.0
+          }
+        },
+        {
+          "concurrency": 64,
+          "completed": 3842,
+          "failed": 0,
+          "wall_seconds": 20.476,
+          "throughput_rps": 187.63,
+          "latency_ms": {
+            "p50": 195.92,
+            "p95": 1109.2,
+            "p99": 1944.51,
+            "mean": 337.22
+          },
+          "batching": {
+            "batches": 1104,
+            "requests": 3842,
+            "mean_batch_size": 3.48,
+            "max_observed_batch_size": 22,
+            "inference_seconds": 13.7519
+          },
+          "gpu": {
+            "samples": 87,
+            "mean_utilization_pct": 8.2,
+            "peak_utilization_pct": 12.0,
+            "peak_memory_mib": 219.0
+          }
+        }
+      ],
+      "summary": {
+        "throughput_rps": {
+          "mean": 162.09,
+          "stderr": 12.789,
+          "n": 3
+        },
+        "p50_ms": {
+          "mean": 246.36,
+          "stderr": 25.459,
+          "n": 3
+        },
+        "p95_ms": {
+          "mean": 1263.417,
+          "stderr": 77.138,
+          "n": 3
+        },
+        "p99_ms": {
+          "mean": 2135.277,
+          "stderr": 97.771,
+          "n": 3
+        },
+        "mean_batch_size": {
+          "mean": 3.036,
+          "stderr": 0.224,
+          "n": 3
+        },
+        "gpu_mean_utilization_pct": {
+          "mean": 7.833,
+          "stderr": 0.186,
+          "n": 3
+        }
+      }
+    }
+  ]
+}
